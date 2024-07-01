@@ -4,9 +4,12 @@ import tensorflow as tf
 from tensorflow.keras.preprocessing import image
 from PIL import Image
 import io
+from flask_cors import CORS  # Import CORS
 
 # Initialize Flask app
 app = Flask(__name__)
+
+CORS(app)  # Enable CORS for all routes
 
 # Load the TFLite model and allocate tensors
 interpreter = tf.lite.Interpreter(model_path='tflite_qaware_model.tflite')
@@ -60,6 +63,7 @@ def predict():
 		return jsonify({"predicted_class": predicted_class_name, "confidence": confidence})
 	except Exception as e:
 		return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
 	app.run(host="localhost", port=5000)
